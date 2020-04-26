@@ -1,0 +1,19 @@
+body{
+    background-color: #F0F002;
+}
+
+h1{
+    color:white;
+}
+
+.purple {
+    background-color: rebeccapurple;
+}
+
+.sky {
+    background-color: blue;
+}
+
+.none{
+    display:none;
+}
