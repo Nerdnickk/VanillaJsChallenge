@@ -17,11 +17,25 @@ function saveToPending(){
     localStorage.setItem(PENDING_LS, JSON.stringify(PENDING_VALUE));
 }
 
-function deleteClickHandle(event){
+function deleteClickFinishing(event){
     const btnTarget = event.target;
     const btnParent = btnTarget.parentNode;
+    const targetList = btnParent.parentNode;
     
-    pendingList.removeChild(btnParent);
+    targetList.removeChild(btnParent);
+    const cleanTodos = FINISHED_VALUE.filter(function(toDo){
+        return parseInt(btnParent.id) !== toDo.id;
+    })
+    FINISHED_VALUE = cleanTodos;
+    saveToFinishing();
+}
+
+function deleteClickPending(event){
+    const btnTarget = event.target;
+    const btnParent = btnTarget.parentNode;
+    const targetList = btnParent.parentNode;
+    
+    targetList.removeChild(btnParent);
     const cleanTodos = PENDING_VALUE.filter(function(toDo){
         return parseInt(btnParent.id) !== toDo.id;
     })
@@ -29,28 +43,87 @@ function deleteClickHandle(event){
     saveToPending();
 };
 
+function resendHandle(event){
+    const btnTarget = event.target;
+    const btnParent = btnTarget.parentNode;
+    console.log(btnParent)
+
+    const text = event.path[1].childNodes[0].innerText;
+    const liId = PENDING_VALUE.length + 1;
+    
+    btnTarget.innerText = "✅";
+    finishedList.removeChild(btnParent);
+    pendingList.appendChild(btnParent);
+    
+    const cleanTodos = FINISHED_VALUE.filter(function(toDo){
+        return parseInt(btnParent.id) !== toDo.id;
+    })
+    FINISHED_VALUE = cleanTodos;
+
+    const pending_obj = {
+        text,
+        id: liId
+    }
+
+    PENDING_VALUE.push(pending_obj);
+
+    saveToPending();
+    saveToFinishing();
+}
+
 function sendHandle(event){
     const btnTarget = event.target;
     const btnParent = btnTarget.parentNode;
-    const text = event.path[1].childNodes[0].innerText;
 
+    const text = event.path[1].childNodes[0].innerText;
     const liId = FINISHED_VALUE.length + 1;
     
     btnTarget.innerText = "⬆️";
     pendingList.removeChild(btnParent);
     finishedList.appendChild(btnParent);
-
+    
     const cleanTodos = PENDING_VALUE.filter(function(toDo){
         return parseInt(btnParent.id) !== toDo.id;
     })
     PENDING_VALUE = cleanTodos;
 
-    const finished_obj = {
-        text: text,
-        id : liId
+    const finishing_obj = {
+        text,
+        id: liId
     }
-    localStorage.removeItem(PENDING_VALUE, );
-    FINISHED_VALUE.push(finished_obj);
+
+    FINISHED_VALUE.push(finishing_obj);
+
+    saveToPending();
+    saveToFinishing();
+}
+
+function showFinishing(text){
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    const btn = document.createElement("button");
+    const btn2 = document.createElement("button");
+
+    const liId = FINISHED_VALUE.length + 1;
+
+    span.innerText = text;
+    btn.innerText="❌";
+    btn.addEventListener("click", deleteClickFinishing);
+    btn2.innerText = "⬆️";
+    btn2.addEventListener("click" , resendHandle);
+    li.id = liId;
+    li.appendChild(span);
+    li.appendChild(btn);
+    li.appendChild(btn2);
+    finishedList.appendChild(li);
+
+    const finishing_obj = {
+        text,
+        id: liId
+    }
+
+    FINISHED_VALUE.push(finishing_obj);
+    saveToFinishing();
 }
 
 function paintToDo(text){
@@ -63,7 +136,7 @@ function paintToDo(text){
     
     span.innerText=text;
     btn.innerText="❌";
-    btn.addEventListener("click", deleteClickHandle);
+    btn.addEventListener("click", deleteClickPending);
     btn2.innerText = "✅";
     btn2.addEventListener("click", sendHandle);
     li.id = liId;
@@ -96,7 +169,10 @@ function loadToDos(){
     }
 
     if(finishing_toDos !== null){
-
+        const parseFinishing = JSON.parse(finishing_toDos);
+        parseFinishing.forEach(function(finishingToDo){
+            showFinishing(finishingToDo.text);
+        })
     }
 }
 
