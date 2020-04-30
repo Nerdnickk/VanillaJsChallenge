@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/default.css">
+    <title>challenge five</title>
+</head>
+<body>
+    <h1 class="title">Random Number Game</h1>
+    <h3 class="titleNumberJs">Generate a number between 0 and 130</h3>
+    <form class="rangeFormJs">
+        <input type="range" min="0" max="130" step="10" value="65" />
+    </form>
+    <div class="guessContainer">
+        <form class="guessInputJs__Contain">
+            <label for="number">Guess the numer:</label>
+            <input class="numberJs" id="number" type="number" name="number" placeholder="Enter the number"/>
+            <input class="submitJs" type="submit" value="Play!" />
+        </form>
+        <div class="choseContain">
+            <span class="playerNum"></span>
+            <span class="machineNum"></span>
+        </div>
+        <div class="return"></div>
+    </div>    
+    <script src="js/randomNumber.js"></script>
+</body>
+</html>
