@@ -63,7 +63,7 @@ function sendHandle(){
         btn.innerText = "⬆️";
         finishedList.appendChild(btnTarget);
 
-        finish_obj = {
+        const finish_obj = {
             text,
             id: liId
         }

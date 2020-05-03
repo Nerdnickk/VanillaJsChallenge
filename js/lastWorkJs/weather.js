@@ -1,4 +1,9 @@
-const weatherWrapper = document.querySelector(".weather__wrapper");
+const weatherWrapper = document.querySelector(".weather__wrapper"),
+    weatherTemp = weatherWrapper.querySelector(".weather__temp"),
+    weatherName = weatherWrapper.querySelector(".weather__name"),
+    weatherPlace = weatherWrapper.querySelector(".weather__place"),
+    weatherIcon = weatherWrapper.querySelector(".weather__ico"),
+    Icon = weatherIcon.querySelector("i");
 
 
 function getWeather(lat ,lon){
@@ -10,8 +15,42 @@ function getWeather(lat ,lon){
         return res.json();
     })
     .then(function(fuckingWeather){
-        console.log(fuckingWeather.main.temp);
-        console.log(fuckingWeather.weather[0].main)
+
+        weatherOpations = {
+            Clouds: {
+                title : "Clouds",
+                titleClass : "fas fa-cloud"
+            },
+            Thunderstorm: {
+                title : "weather-lightning",
+                titleClass : "fas fa-foo-storm"
+            },
+            Drizzle: {
+                title : "weather-hail",
+                titleClass: "fas fa-cloud-showers-heavy"
+            },
+            Snow: {
+                title : "weather-snowy",
+                titleClass : "far fa-snowflake"
+            },
+            Atmosphere: {
+                title : "weather-partlycloudy",
+                titleClass : "fas fa-sun"
+            },
+            Clear: {
+                title : "weather-sunny",
+                titleClass : "fas fa-sun"
+            }
+        }
+
+        const temp = fuckingWeather.main.temp;
+        const weaName = fuckingWeather.weather[0].main;
+        const place = fuckingWeather.name;
+        
+        weatherPlace.innerHTML = place;
+        weatherTemp.innerHTML = temp;
+        weatherName.innerHTML = weatherOpations[weaName].title;
+        Icon.className = weatherOpations[weaName].titleClass;
     })
 }
 
